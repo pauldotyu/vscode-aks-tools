@@ -30,7 +30,22 @@ Kickstart is a **Preview feature** and is gated behind a setting.
 
 Command: **AKS: Launch Kickstart Agent** (`aks.kickstart.launchExperience`)
 
-The agent walks through seven sequential phases:
+The Command Palette entry opens **Connect your repository**, the first screen of the existing-app
+guided deployment preview. Sign in to GitHub to search your accessible repositories, or paste a
+repository URL. Select a repository to prefill the workspace name, default base branch, and suggested
+working branch. All three fields are editable.
+
+The picker starts with **My repositories**. Select **All accessible repositories** to include
+organization and collaborator repositories. Results load 100 at a time, with **Load more repositories**
+for additional pages. Search filters the loaded results; pasting a URL does not require loading all pages.
+The signed-in account appears as soon as authentication completes, and failed requests can be retried.
+
+This first-screen preview does not connect or inspect the repository yet. **Connect and inspect**
+and application-folder selection remain disabled; no checkout, branch, file, or Azure resource is
+changed. Configure, Review, and Deploy are shown as future stages, not available actions.
+
+Choose **Other ways to start** for the existing new-app, sample, and current-workspace paths.
+Those paths, and selecting `kickstart` directly in Copilot Chat, retain the seven-phase agent flow:
 
 1. **Discover** — understand the app (language, dependencies, ports, environment variables) and map each service.
 2. **Configure Infrastructure** — create new or select existing Azure resources (resource group, AKS Automatic cluster, ACR).

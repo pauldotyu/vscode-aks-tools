@@ -1,0 +1,322 @@
+.page {
+    max-width: 63rem;
+    margin: 1.75rem auto 2.5rem;
+    line-height: 1.5;
+}
+
+.context {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    color: var(--vscode-descriptionForeground);
+    overflow-wrap: anywhere;
+}
+
+.stages {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.stages li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0;
+    color: var(--vscode-descriptionForeground);
+    border-bottom: 2px solid transparent;
+}
+
+.stages li[aria-current="step"] {
+    color: var(--vscode-foreground);
+    border-bottom-color: var(--vscode-focusBorder);
+    font-weight: 600;
+}
+
+.stageNumber {
+    font-variant-numeric: tabular-nums;
+}
+
+.heading {
+    margin: 1.25rem 0;
+}
+
+.heading h1 {
+    margin: 0 0 0.4rem;
+    font-size: 1.65rem;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.heading p {
+    max-width: 75ch;
+    margin: 0;
+    color: var(--vscode-descriptionForeground);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+.field label {
+    font-weight: 500;
+}
+
+.field input[type="text"] {
+    width: 100%;
+    height: 2.25rem;
+    color: var(--vscode-input-foreground);
+    font-size: inherit;
+    border-color: var(--vscode-input-border, var(--vscode-dropdown-border));
+}
+
+.field input::placeholder {
+    color: var(--vscode-input-placeholderForeground);
+}
+
+.field input[aria-invalid="true"] {
+    border-color: var(--vscode-inputValidation-errorBorder);
+}
+
+.hint,
+.fieldError,
+.repositoryStatus p,
+.selectionStatus p {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.hint,
+.repositoryStatus,
+.selectionStatus p {
+    color: var(--vscode-descriptionForeground);
+}
+
+.fieldError {
+    color: var(--vscode-errorForeground);
+}
+
+.repositoryHeading,
+.repositorySource,
+.repositoryPagination,
+.account {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+.repositorySource select {
+    height: 2rem;
+    max-width: 100%;
+    font-size: inherit;
+}
+
+.repositoryPagination {
+    justify-content: space-between;
+}
+
+.repositoryHeading {
+    justify-content: space-between;
+}
+
+.account {
+    color: var(--vscode-descriptionForeground);
+    overflow-wrap: anywhere;
+}
+
+.page button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    font-size: inherit;
+}
+
+.repositoryStatus {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 1.5rem;
+}
+
+.repositoryStatus[hidden] {
+    display: none;
+}
+
+.loadingBar {
+    width: 5rem;
+    height: 0.6rem;
+    background: var(--vscode-progressBar-background);
+    opacity: 0.45;
+}
+
+.repositoryPicker {
+    position: relative;
+    min-width: 0;
+}
+
+.repositoryInput {
+    position: relative;
+}
+
+.repositoryInput > svg {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    color: var(--vscode-input-placeholderForeground);
+    pointer-events: none;
+}
+
+.repositoryInput input[type="text"] {
+    padding-left: 2.15rem;
+}
+
+.repositoryResults {
+    position: absolute;
+    z-index: 2;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+    background: var(--vscode-dropdown-background);
+    color: var(--vscode-dropdown-foreground);
+    border: 1px solid var(--vscode-focusBorder);
+}
+
+.repositoryResults ul {
+    max-height: 15rem;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0.25rem 0;
+    margin: 0;
+}
+
+.repositoryResults li {
+    cursor: pointer;
+    padding: 0.65rem 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+.repositoryResults li p {
+    margin: 0.25rem 0 0 1.4rem;
+    color: var(--vscode-dropdown-foreground);
+}
+
+.repositoryResults li.activeRepository {
+    background: var(--vscode-list-activeSelectionBackground);
+    color: var(--vscode-list-activeSelectionForeground);
+}
+
+.repositoryResults li.activeRepository p {
+    color: inherit;
+}
+
+.repositoryName,
+.repositoryVisibility {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.repositoryName {
+    flex-wrap: wrap;
+}
+
+.repositoryVisibility {
+    font-size: 0.9em;
+}
+
+.repositoryPushed {
+    font-size: 0.9em;
+    opacity: 0.75;
+    white-space: nowrap;
+}
+
+/* The name absorbs the free space, so the badges sit right without auto-margin juggling. */
+.repositoryName > .repositoryTitle {
+    margin-right: auto;
+}
+
+.noResults {
+    margin: 0;
+    padding: 0.85rem;
+}
+
+.branches {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 1.5rem;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    border-top: 1px solid var(--vscode-panel-border);
+    padding-top: 1.25rem;
+}
+
+.selectionStatus strong {
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.previewNotice {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin: 0;
+    color: var(--vscode-descriptionForeground);
+    max-width: 85ch;
+}
+
+.previewNotice svg {
+    flex-shrink: 0;
+    color: var(--vscode-editorInfo-foreground);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+    .page {
+        margin-top: 1rem;
+    }
+
+    .stages li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.1rem;
+    }
+
+    .branches {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .repositoryHeading,
+    .account {
+        align-items: flex-start;
+    }
+
+    .repositoryName {
+        align-items: baseline;
+    }
+}

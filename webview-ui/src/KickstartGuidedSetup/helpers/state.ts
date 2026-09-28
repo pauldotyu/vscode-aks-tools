@@ -1,6 +1,10 @@
-import { GitHubRepo, InitialState } from "../../../../src/webview-contract/webviewDefinitions/kickstartGuidedSetup";
-import { WebviewStateUpdater } from "../../utilities/state";
-import { getWebviewMessageContext } from "../../utilities/vscode";
+import {
+    GitHubRepo,
+    GitHubRepositoryRequest,
+    GitHubRepositoryScope,
+    InitialState,
+} from "../../../../src/webview-contract/webviewDefinitions/kickstartGuidedSetup";
+import type { WebviewStateUpdater } from "../../utilities/state";
 
 export enum Stage {
     CollectingInput,
@@ -14,15 +18,17 @@ export type KickstartGuidedSetupState = InitialState & {
     githubReposLoading: boolean;
     githubReposError: string | null;
     githubSignedInUser: string | null;
-    /** True when the repo list was capped before exhausting the user's repos. */
-    githubReposTruncated: boolean;
+    githubSigningIn: boolean;
     /** True when listing failed purely because no GitHub session is available. */
     githubNeedsSignIn: boolean;
+    githubReposScope: GitHubRepositoryScope;
+    githubReposPage: number;
+    githubReposNextPage: number | null;
 };
 
 export type EventDef = {
     setFinishing: void;
-    setGitHubReposLoading: void;
+    setGitHubReposLoading: GitHubRepositoryRequest;
 };
 
 export const stateUpdater: WebviewStateUpdater<"kickstartGuidedSetup", EventDef, KickstartGuidedSetupState> = {
@@ -34,39 +40,83 @@ export const stateUpdater: WebviewStateUpdater<"kickstartGuidedSetup", EventDef,
         githubReposLoading: false,
         githubReposError: null,
         githubSignedInUser: null,
-        githubReposTruncated: false,
+        githubSigningIn: false,
         githubNeedsSignIn: false,
+        githubReposScope: "owned",
+        githubReposPage: 1,
+        githubReposNextPage: null,
     }),
     vscodeMessageHandler: {
-        errorNotification: (state, args) => ({ ...state, errorMessage: args.message, stage: Stage.CollectingInput }),
-        gitHubReposLoaded: (state, args) => ({
+        errorNotification: (state, args) => ({
             ...state,
-            githubRepos: args.repos,
-            githubReposLoading: false,
-            githubReposError: null,
-            githubSignedInUser: args.signedInUser,
-            githubReposTruncated: args.hasMore,
-            githubNeedsSignIn: false,
+            errorMessage: args.message,
+            stage: Stage.CollectingInput,
         }),
-        gitHubReposError: (state, args) => ({
-            ...state,
-            githubReposLoading: false,
-            githubReposError: args.message,
-            githubSignedInUser: args.signedInUser ?? state.githubSignedInUser,
-            githubNeedsSignIn: args.needsSignIn,
-        }),
+        gitHubReposLoading: setRepositoriesLoading,
+        gitHubAccountLoaded: (state, args) =>
+            args.scope !== state.githubReposScope
+                ? state
+                : {
+                      ...state,
+                      githubSigningIn: false,
+                      githubSignedInUser: args.signedInUser,
+                      githubNeedsSignIn: args.signedInUser === null,
+                      githubRepos: args.signedInUser ? state.githubRepos : null,
+                      githubReposNextPage: args.signedInUser ? state.githubReposNextPage : null,
+                  },
+        gitHubReposLoaded: (state, args) =>
+            args.scope !== state.githubReposScope || args.page !== state.githubReposPage
+                ? state
+                : {
+                      ...state,
+                      githubRepos:
+                          args.page === 1 || !args.signedInUser
+                              ? args.repos
+                              : Array.from(
+                                    new Map(
+                                        [...(state.githubRepos ?? []), ...args.repos].map((repo) => [
+                                            repo.fullName,
+                                            repo,
+                                        ]),
+                                    ).values(),
+                                ),
+                      githubReposLoading: false,
+                      githubSigningIn: false,
+                      githubReposError: null,
+                      githubSignedInUser: args.signedInUser,
+                      githubNeedsSignIn: args.signedInUser === null,
+                      githubReposNextPage: args.nextPage,
+                  },
+        gitHubReposError: (state, args) =>
+            args.scope !== state.githubReposScope || args.page !== state.githubReposPage
+                ? state
+                : {
+                      ...state,
+                      githubReposLoading: false,
+                      githubSigningIn: false,
+                      githubReposError: args.message,
+                      githubSignedInUser: args.signedInUser,
+                      githubNeedsSignIn: args.needsSignIn,
+                  },
     },
     eventHandler: {
         setFinishing: (state) => ({ ...state, stage: Stage.Finishing }),
-        setGitHubReposLoading: (state) => ({
-            ...state,
-            githubReposLoading: true,
-            githubReposError: null,
-        }),
+        setGitHubReposLoading: setRepositoriesLoading,
     },
 };
 
-export const vscode = getWebviewMessageContext<"kickstartGuidedSetup">({
-    finishRequest: null,
-    listGitHubReposRequest: null,
-});
+function setRepositoriesLoading(
+    state: KickstartGuidedSetupState,
+    request: GitHubRepositoryRequest,
+): KickstartGuidedSetupState {
+    return {
+        ...state,
+        githubRepos: request.page === 1 ? null : state.githubRepos,
+        githubReposNextPage: request.page === 1 ? null : state.githubReposNextPage,
+        githubReposLoading: true,
+        githubSigningIn: request.prompt,
+        githubReposError: null,
+        githubReposScope: request.scope,
+        githubReposPage: request.page,
+    };
+}

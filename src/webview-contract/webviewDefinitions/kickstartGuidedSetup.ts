@@ -26,25 +26,49 @@ export interface GitHubRepo {
     description: string | null;
     cloneUrl: string;
     private: boolean;
+    defaultBranch: string;
     /** ISO timestamp of the last push, or null if GitHub didn't report one. */
     pushedAt: string | null;
+}
+
+export type GitHubRepositoryScope = "owned" | "all";
+
+export interface GitHubRepositoryRequest {
+    /** Gates the interactive sign-in/consent dialog; background loads pass false. */
+    prompt: boolean;
+    scope: GitHubRepositoryScope;
+    page: number;
+}
+
+export interface GitHubRepositoryPage {
+    repos: GitHubRepo[];
+    /** Next page number, or null when the last page has been reached. */
+    nextPage: number | null;
+}
+
+export interface GitHubRepositoryResponseContext {
+    scope: GitHubRepositoryScope;
+    page: number;
+    signedInUser: string | null;
 }
 
 export interface InitialState {
     samples: KickstartSample[];
     workspaceIsEmpty: boolean;
+    workspaceName: string | null;
 }
 
 export type ToVsCodeMsgDef = {
     finishRequest: GuidedSetupSelections;
-    /** `prompt` gates the interactive sign-in/consent dialog; background loads pass false. */
-    listGitHubReposRequest: { prompt: boolean };
+    listGitHubReposRequest: GitHubRepositoryRequest;
 };
 
 export type ToWebViewMsgDef = {
     errorNotification: { message: string };
-    gitHubReposLoaded: { repos: GitHubRepo[]; signedInUser: string | null; hasMore: boolean };
-    gitHubReposError: { message: string; signedInUser: string | null; needsSignIn: boolean };
+    gitHubReposLoading: GitHubRepositoryRequest;
+    gitHubAccountLoaded: GitHubRepositoryResponseContext;
+    gitHubReposLoaded: GitHubRepositoryPage & GitHubRepositoryResponseContext;
+    gitHubReposError: { message: string; needsSignIn: boolean } & GitHubRepositoryResponseContext;
 };
 
 export type KickstartGuidedSetupDefinition = WebviewDefinition<InitialState, ToVsCodeMsgDef, ToWebViewMsgDef>;

@@ -7,7 +7,7 @@ export interface TestScenarioSelectorProps {
 }
 
 export function TestScenarioSelector(props: TestScenarioSelectorProps) {
-    const [selected, setSelected] = useState("");
+    const [selected, setSelected] = useState(() => new URLSearchParams(window.location.search).get("scenario") ?? "");
     const [key, setKey] = useState(0);
 
     function handleTestScenarioChange(name: string) {
@@ -30,6 +30,10 @@ export function TestScenarioSelector(props: TestScenarioSelectorProps) {
         }
 
         return scenario.factory();
+    }
+
+    if (new URLSearchParams(window.location.search).get("standalone") === "1") {
+        return getContent();
     }
 
     return (

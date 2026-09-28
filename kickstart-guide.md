@@ -44,7 +44,7 @@ The `chatAgents` entry uses `"when": "config.aks.kickstartEnabledPreview == true
 | Entry Point | How | What happens |
 |---|---|---|
 | **Agent picker** | User selects "kickstart" in Copilot's agent dropdown | Full agent prompt loads, starts at Phase 1 |
-| **Command palette** | User runs `AKS: Launch Kickstart Agent` (`aks.kickstart.launchExperience`) | Hides sidebar/panel, opens chat, sends initial message to kickstart agent |
+| **Command palette** | User runs `AKS: Launch Kickstart Agent` (`aks.kickstart.launchExperience`) | Hides sidebar/panel and opens the existing-app Connect preview; other starting points continue in chat |
 | **Prompt file** | User runs `kickstart.prompt.md` from the prompt picker | Lightweight version — invokes `/kickstart-discover` and starts the flow |
 
 ## Agent Handoffs

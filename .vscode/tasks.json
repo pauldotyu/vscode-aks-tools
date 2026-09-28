@@ -8,19 +8,56 @@
             "type": "npm",
             "script": "webpack-dev",
             "isBackground": true,
-            "problemMatcher": {
-                "owner": "webpack",
-                "fileLocation": "absolute",
-                "pattern": {
-                    "regexp": "ERROR in (.*)",
-                    "file": 1
+            "problemMatcher": [
+                {
+                    "owner": "webpack",
+                    "source": "webpack",
+                    "applyTo": "allDocuments",
+                    "fileLocation": "absolute",
+                    "pattern": [
+                        {
+                            "regexp": "^\\[tsl\\] ERROR in (.+)\\((\\d+),(\\d+)\\)\\s*$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3
+                        },
+                        {
+                            "regexp": "^\\s*(TS\\d+):\\s*(.*)$",
+                            "code": 1,
+                            "message": 2
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^\\s*\\[webpack-cli\\] Compiler(?: '[^']+')? starting\\.\\.\\.\\s*$",
+                        "endsPattern": "^webpack(?: \\S+)? compiled\\b.*$"
+                    }
                 },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "webpack .* compilat",
-                    "endsPattern": "webpack .* compiled"
+                {
+                    "base": "$tsc",
+                    "owner": "webpack",
+                    "source": "webview TypeScript",
+                    "applyTo": "allDocuments",
+                    "fileLocation": ["relative", "${workspaceFolder}/webview-ui"],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^\\s*\\[webpack-cli\\] Compiler(?: '[^']+')? starting\\.\\.\\.\\s*$",
+                        "endsPattern": "^webpack(?: \\S+)? compiled\\b.*$"
+                    }
+                },
+                {
+                    "base": "$eslint-stylish",
+                    "owner": "webpack",
+                    "source": "webpack ESLint",
+                    "applyTo": "allDocuments",
+                    "fileLocation": "absolute",
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^\\s*\\[webpack-cli\\] Compiler(?: '[^']+')? starting\\.\\.\\.\\s*$",
+                        "endsPattern": "^webpack(?: \\S+)? compiled\\b.*$"
+                    }
                 }
-            }
+            ]
         },
         {
             "label": "webpack",

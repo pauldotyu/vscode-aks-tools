@@ -21,6 +21,7 @@ import { getTCPDumpScenarios } from "./tcpDumpTests";
 import { TestScenarioSelector } from "./TestScenarioSelector/TestScenarioSelector";
 import { getTestStyleViewerScenarios } from "./testStyleViewerTests";
 import { getCreateFleetScenarios } from "./createFleetTests";
+import { getKickstartGuidedSetupScenarios } from "./kickstartGuidedSetupTests";
 import "./vars.css";
 
 // There are two modes of launching this application:
@@ -59,7 +60,7 @@ const contentTestScenarios: Record<ContentId, Scenario[]> = {
     // Hardcoded createFleet: Only to ensure the dependencies are resolved for compilation.
     // TODO: Replace with the actual scenarios when available.
     fleetProperties: [],
-    kickstartGuidedSetup: [],
+    kickstartGuidedSetup: getKickstartGuidedSetupScenarios(),
     kickstartCluster: [],
 };
 

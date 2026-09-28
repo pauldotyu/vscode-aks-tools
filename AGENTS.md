@@ -40,7 +40,7 @@ Invokes: `/kickstart-review`, `/kickstart-safeguard-checklist`, `/kickstart-secu
 | Method | Command/Action | Effect |
 |---|---|---|
 | Agent picker | Select "kickstart" in Copilot dropdown | Starts Phase 1 |
-| Command palette | `AKS: Launch Kickstart Agent` (`aks.kickstart.launchExperience`) | Hides sidebar/panel, opens chat, invokes kickstart |
+| Command palette | `AKS: Launch Kickstart Agent` (`aks.kickstart.launchExperience`) | Hides sidebar/panel and opens the existing-app Connect preview; other starting points continue in chat |
 | Prompt file | `kickstart.prompt.md` | Lightweight discovery flow |
 
 ## Skills

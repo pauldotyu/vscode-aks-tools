@@ -1117,7 +1117,7 @@
         "vscode:prepublish": "npm run webpack",
         "package": "vsce package --no-dependencies",
         "webpack": "npm run build:webview && webpack --mode production",
-        "webpack-dev": "npm run build:webview && webpack --mode development --watch",
+        "webpack-dev": "npm run build:webview && webpack --mode development --watch --infrastructure-logging-level log --no-color",
         "test-compile": "npm run build:webview && tsc -p ./ && node scripts/prepare-test-assets.js",
         "watch": "tsc -watch -p ./",
         "test": "npm run test-compile && node ./out/src/tests/runTests.js",
